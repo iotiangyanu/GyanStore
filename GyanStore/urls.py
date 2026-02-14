@@ -24,6 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('shop/',include('shop.urls')),
     path('blog/',include('blog.urls')),
+    path('seller/', include('seller.urls')),
     path('',views.index, name='index'),
 ]
 

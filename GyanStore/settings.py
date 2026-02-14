@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'seller',
     'blog',
 ]
 
@@ -54,7 +55,9 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'GyanStore.urls'
 
 TEMPLATES = [
+    
     {
+        'DIRS': [BASE_DIR / 'templates'],
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': ['templates'],
         'APP_DIRS': True,

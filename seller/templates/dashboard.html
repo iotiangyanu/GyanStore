@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Seller Dashboard - Gyan Store</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+        <style>
+            body { background-color: #f8f9fa; }
+            footer { background: #141e30; color: white; padding: 30px 0; }
+            .banner-img { max-height: 260px; object-fit: cover; }
+        </style>
+</head>
+<body>
+{% load static %}
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+    <div class="container">
+        <a class="navbar-brand" href="/">GYAN STORE</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item"><a class="nav-link" href="/shop/">Shop</a></li>
+                <li class="nav-item"><a class="nav-link" href="/blog/">Blog</a></li>
+                <li class="nav-item"><a class="btn btn-outline-light ms-3 btn-sm" href="/admin/">Admin Login</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- PAGE BANNER -->
+<section>
+    <img src="https://via.placeholder.com/1200x260?text=Gyan+Store+Seller+Dashboard" class="img-fluid w-100 banner-img" alt="Gyan Store Banner">
+</section>
+
+<div class="container mt-4">
+
+        <div class="d-flex justify-content-between mb-4">
+                <h2>My Products</h2>
+                <a href="{% url 'add_product' %}" class="btn btn-primary">+ Add Product</a>
+        </div>
+
+        <table class="table table-bordered text-center">
+                <thead class="table-dark">
+                        <tr>
+                                <th>#</th>
+                                <th>Image</th>
+                                <th>Name</th>
+                                <th>Price</th>
+                                <th>Stock</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                        </tr>
+                </thead>
+                <tbody>
+                        {% for product in products %}
+                        <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>
+                                        {% if product.image %}
+                                                <img src="{{ product.image.url }}" width="60" alt="{{ product.name }}">
+                                        {% else %}
+                                                <img src="https://via.placeholder.com/60x60?text=No+Image" width="60" alt="No image">
+                                        {% endif %}
+                                </td>
+                                <td>{{ product.name }}</td>
+                                <td>₹{{ product.price }}</td>
+                                <td>{{ product.stock }}</td>
+                                <td>
+                                        {% if product.is_approved %}
+                                                <span class="badge bg-success">Approved</span>
+                                        {% else %}
+                                                <span class="badge bg-warning">Pending</span>
+                                        {% endif %}
+                                </td>
+                                <td>
+                                        <a href="{% url 'edit_product' product.id %}" class="btn btn-warning btn-sm">Edit</a>
+                                        <a href="{% url 'delete_product' product.id %}" class="btn btn-danger btn-sm">Delete</a>
+                                </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                                <td colspan="7">No products found.</td>
+                        </tr>
+                        {% endfor %}
+                </tbody>
+        </table>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+    <div class="container text-center">
+        <p class="mb-1">&copy; 2026 Gyan Store</p>
+        <small>Built with Django | Shop & Blog Integrated Platform</small>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
