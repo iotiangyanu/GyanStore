@@ -1,40 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Edit Product - Gyan Store</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-        <style>
-            footer { background: #141e30; color: white; padding: 30px 0; }
-            .banner-img { max-height: 220px; object-fit: cover; }
-        </style>
-</head>
-<body>
+{% extends 'layout.html'%}
+
+{% block title%}
+edit_product
+{%endblock%}
+
+{%block content%}
 {% load static %}
-
-<!-- NAVBAR -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
-    <div class="container">
-        <a class="navbar-brand" href="/">GYAN STORE</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto align-items-center">
-                <li class="nav-item"><a class="nav-link" href="/shop/">Shop</a></li>
-                <li class="nav-item"><a class="nav-link" href="/blog/">Blog</a></li>
-                <li class="nav-item"><a class="btn btn-outline-light ms-3 btn-sm" href="/admin/">Admin Login</a></li>
-            </ul>
-        </div>
-    </div>
-</nav>
-
-<!-- PAGE BANNER -->
-<section>
-    <img src="https://via.placeholder.com/1200x220?text=Edit+Product+-+Gyan+Store" class="img-fluid w-100 banner-img" alt="Edit Product Banner">
-</section>
 
 <div class="container mt-4">
     <div class="card shadow">
@@ -149,14 +120,4 @@
     </div>
 </div>
 
-<!-- FOOTER -->
-<footer>
-    <div class="container text-center">
-        <p class="mb-1">&copy; 2026 Gyan Store</p>
-        <small>Built with Django | Shop & Blog Integrated Platform</small>
-    </div>
-</footer>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+{% endblock %}

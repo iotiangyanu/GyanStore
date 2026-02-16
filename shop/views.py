@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
-from django.db.models import Prefetch
+from django.db.models import Prefetch, Avg, Count, FloatField
+from django.db.models.functions import Coalesce
 from django.contrib.auth.decorators import login_required
 from . models import Category, Product, Review
 # Create your views here.
@@ -11,7 +12,13 @@ def shop_home(request):
     query = request.GET.get("q")
     category_slug = request.GET.get("category")
 
-    products_queryset = Product.objects.filter(is_active=True)
+    products_queryset = Product.objects.filter(is_active=True).annotate(
+        avg_rating=Coalesce(
+            Avg("reviews__rating", output_field=FloatField()),
+            0.0
+        ),
+        total_reviews=Count("reviews")
+    )
 
     if query:
         products_queryset = products_queryset.filter(name__icontains=query)

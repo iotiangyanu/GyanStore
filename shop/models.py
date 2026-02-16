@@ -22,7 +22,6 @@ class Product(models.Model):
         related_name="products",
         on_delete=models.CASCADE
     )
-
     name = models.CharField(max_length=255)
     slug = models.SlugField(unique=True, blank=True)
     image = models.ImageField(upload_to="product/", blank=True, null=True)
