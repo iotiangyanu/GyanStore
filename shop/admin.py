@@ -10,22 +10,26 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ("name", "category", "price", "stock", "is_active")
-    list_filter = ("category", "is_active")
+    list_display = ("name", "category", "price", "stock", "status", "is_active")
+    list_filter = ("category", "status", "is_active")
     search_fields = ("name",)
     prepopulated_fields = {"slug": ("name",)}
     fieldsets = (
-    ("Basic Info", {
-        "fields": ("category", "name", "slug", "description")
-    }),
-    ("Image Options", {
-        "fields": ("image", "image_url"),
-        "description": "Upload image OR paste image URL."
-    }),
-    ("Pricing & Stock", {
-        "fields": ("price", "stock", "is_active")
-    }),
-)
+        ("Basic Info", {
+            "fields": ("category", "name", "slug", "description")
+        }),
+        ("Image Options", {
+            "fields": ("image", "image_url"),
+            "description": "Upload image OR paste image URL."
+        }),
+        ("Pricing & Stock", {
+            "fields": ("price", "stock", "is_active")
+        }),
+        ("Status Management", {
+            "fields": ("status",),
+            "description": "Set product status: Pending (awaiting review), Approved, or Rejected"
+        }),
+    )
 
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):

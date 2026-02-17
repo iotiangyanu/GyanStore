@@ -16,12 +16,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.views.generic import RedirectView
 from django.conf import settings
 from django.conf.urls.static import static
 from . import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    # Redirect public /admin/ to the custom accounts login page
+    path('admin/', RedirectView.as_view(url='/login/', permanent=False)),
+    # Real admin site moved to /djadmin/ to keep it accessible
+    path('djadmin/', admin.site.urls),
     path('shop/',include('shop.urls')),
     path('blog/',include('blog.urls')),
     path('seller/', include('seller.urls')),

@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
-from django.db.models import Prefetch, Avg, Count, FloatField
+from django.db.models import Prefetch, Avg, Count, FloatField, Q
 from django.db.models.functions import Coalesce
 from django.contrib.auth.decorators import login_required
 from . models import Category, Product, Review
@@ -12,7 +12,7 @@ def shop_home(request):
     query = request.GET.get("q")
     category_slug = request.GET.get("category")
 
-    products_queryset = Product.objects.filter(is_active=True).annotate(
+    products_queryset = Product.objects.filter(is_active=True, status='approved').annotate(
         avg_rating=Coalesce(
             Avg("reviews__rating", output_field=FloatField()),
             0.0
@@ -26,7 +26,9 @@ def shop_home(request):
     if category_slug:
         products_queryset = products_queryset.filter(category__slug=category_slug)
 
-    categories = Category.objects.prefetch_related(
+    categories = Category.objects.annotate(
+        product_count=Count('products', filter=Q(products__status='approved', products__is_active=True))
+    ).filter(product_count__gt=0).prefetch_related(
         Prefetch(
             "products",
             queryset=products_queryset,
@@ -43,7 +45,7 @@ def shop_home(request):
 
 
 def product_detail(request, slug):
-    product = get_object_or_404(Product, slug=slug)
+    product = get_object_or_404(Product, slug=slug, status='approved')
     reviews = product.reviews.all().order_by("-created_at")
 
     return render(request, "shop/product_detail.html", {
@@ -68,3 +70,6 @@ def add_review(request, slug):
         )
 
     return redirect("product_detail", slug=slug)
+
+
+
