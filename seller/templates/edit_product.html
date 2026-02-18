@@ -30,16 +30,19 @@ edit_product
                 <!-- Category -->
                 <div class="mb-3">
                     <label class="form-label">Category</label>
-                    <select name="category" class="form-select" required>
+                    <select name="category" class="form-select" id="categorySelect" onchange="toggleCustomCategory()" required>
+                        <option value="">-- Select a category --</option>
                         {% for category in categories %}
-                            <option value="{{ category.id }}"
-                                {% if product.category.id == category.id %}
+                            <option value="{{ category.name }}"
+                                {% if product.category.name == category.name %}
                                     selected
                                 {% endif %}>
                                 {{ category.name }}
                             </option>
                         {% endfor %}
+                        <option value="custom">-- Add New Category --</option>
                     </select>
+                    <input type="text" name="custom_category" class="form-control mt-2" id="customCategoryInput" placeholder="Enter new category name" style="display: none;">
                 </div>
 
                 <!-- Price -->
@@ -119,5 +122,20 @@ edit_product
         </div>
     </div>
 </div>
+
+<script>
+function toggleCustomCategory() {
+    const categorySelect = document.getElementById('categorySelect');
+    const customCategoryInput = document.getElementById('customCategoryInput');
+    
+    if (categorySelect.value === 'custom') {
+        customCategoryInput.style.display = 'block';
+        customCategoryInput.required = true;
+    } else {
+        customCategoryInput.style.display = 'none';
+        customCategoryInput.required = false;
+    }
+}
+</script>
 
 {% endblock %}

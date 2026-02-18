@@ -27,9 +27,11 @@ urlpatterns = [
     # Real admin site moved to /djadmin/ to keep it accessible
     path('djadmin/', admin.site.urls),
     path('shop/',include('shop.urls')),
-    path('blog/',include('blog.urls')),
+    path('accounts/', include('accounts.urls')),
     path('seller/', include('seller.urls')),
     path('login/', include('accounts.urls')),
+    path('accounts/login/', include('accounts.urls')),
+    # path('seller/login/', views.seller_login, name='seller_login'),
     path('',views.index, name='index'),
 ]
 

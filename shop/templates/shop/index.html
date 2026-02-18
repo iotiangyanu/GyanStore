@@ -25,6 +25,97 @@
 
     .products-grid { gap: 1.25rem; }
 
+    .carousel-container {
+      position: relative;
+      margin-bottom: 1.5rem;
+    }
+
+    .carousel-inner-custom {
+      display: flex;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      gap: 1.25rem;
+      padding: 0.5rem 0;
+    }
+
+    .carousel-inner-custom::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .carousel-inner-custom::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+
+    .carousel-inner-custom::-webkit-scrollbar-thumb {
+      background: #888;
+      border-radius: 10px;
+    }
+
+    .carousel-inner-custom::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+
+    .carousel-item-custom {
+      flex: 0 0 calc(25% - 0.94rem);
+      min-width: calc(25% - 0.94rem);
+    }
+
+    .carousel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 10;
+      background: rgba(0, 0, 0, 0.7);
+      border: none;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .carousel-btn:hover {
+      background: rgba(0, 0, 0, 0.9);
+    }
+
+    .carousel-btn-prev {
+      left: -50px;
+    }
+
+    .carousel-btn-next {
+      right: -50px;
+    }
+
+    @media (max-width: 1024px) {
+      .carousel-item-custom {
+        flex: 0 0 calc(33.333% - 0.83rem);
+        min-width: calc(33.333% - 0.83rem);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .carousel-item-custom {
+        flex: 0 0 calc(50% - 0.63rem);
+        min-width: calc(50% - 0.63rem);
+      }
+    }
+
+    @media (max-width: 576px) {
+      .carousel-item-custom {
+        flex: 0 0 calc(100% - 0rem);
+        min-width: calc(100% - 0rem);
+      }
+      
+      .carousel-btn-prev {
+        left: 10px;
+      }
+
+      .carousel-btn-next {
+        right: 10px;
+      }
+    }
+
     .product-card {
       border: 0; border-radius: .75rem;
       overflow: hidden;
@@ -79,6 +170,20 @@
       transform: translateY(0);
       transition: all .25s ease;
     }
+    .product-link {
+    text-decoration: none;   /* Remove underline */
+    color: inherit;          /* Use normal text color */
+    }
+
+    .product-link:hover {
+    color: inherit;          /* Prevent blue hover */
+    text-decoration: none;
+    }
+
+    .product-title {
+    font-weight: 600;
+    }
+
 
     @media (max-width: 576px) {
       :root { --nav-height: 64px; }
@@ -162,7 +267,7 @@
                   onchange="this.form.submit()">
             <option value="">All Categories</option>
 
-            {% for category in categories|default:'' %}
+            {% for category in all_categories %}
               <option value="{{ category.slug }}"
                 {% if request.GET.category == category.slug %}selected{% endif %}>
                 {{ category.name }}
@@ -192,78 +297,89 @@
           {{ category.name }}
         </h3>
 
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 products-grid">
+        <div class="carousel-container">
+          <button class="carousel-btn carousel-btn-prev" onclick="scrollCarousel('carousel-{{ category.id }}', -300)">
+            <i class="bi bi-chevron-left"></i>
+          </button>
 
-          {% with category_products=category.filtered_products %}
-            {% if category_products %}
-              {% for product in category_products %}
-              <div class="col mb-4">
-                <div class="card product-card h-100">
+          <div class="carousel-inner-custom" id="carousel-{{ category.id }}">
 
-                  <div class="product-image p-3">
-                    {% if product.get_image %}
-                      <img src="{{ product.get_image }}" alt="{{ product.name }}">
-                    {% else %}
-                      <img src="{% static 'shop/no-image.png' %}" alt="No image">
-                    {% endif %}
-                  </div>
+            {% with category_products=category.filtered_products %}
+              {% if category_products %}
+                {% for product in category_products %}
+                <div class="carousel-item-custom">
+                  <div class="card product-card h-100">
 
-                  <div class="card-body d-flex flex-column">
-                    <h5 class="mb-1">{{ product.name }}</h5>
-
-                    <p class="text-muted small mb-3">
-                      {{ product.description|truncatechars:80 }}
-                    </p>
-
-                    <!-- Rating Section -->
-                    <div class="mb-3">
-                      <div class="d-flex align-items-center gap-2">
-                        <!-- Star Display (out of 5) -->
-                        <div class="rating-stars">
-                          {% for i in "12345" %}
-                            {% if i|add:"0" <= product.avg_rating %}
-                              <i class="bi bi-star-fill" style="color: #ffc107;"></i>
-                            {% elif i|add:"0" < product.avg_rating|add:"1" %}
-                              <i class="bi bi-star-half" style="color: #ffc107;"></i>
-                            {% else %}
-                              <i class="bi bi-star" style="color: #ccc;"></i>
-                            {% endif %}
-                          {% endfor %}
-                        </div>
-                        <!-- Rating Text -->
-                        <span class="small text-muted">
-                          {{ product.avg_rating|floatformat:1 }} ({{ product.total_reviews }})
-                        </span>
-                      </div>
-                    </div>
-
-                    <div class="d-flex align-items-center justify-content-between mt-auto">
-                      {% if product.stock > 0 %}
-                        <div class="price">₹{{ product.price }}</div>
-                      {% endif %}
-
-                      {% if product.stock <= 0 %}
-                        <span class="badge bg-danger">Out of Stock</span>
+                    <div class="product-image p-3">
+                      
+                      {% if product.get_image %}
+                        <img src="{{ product.get_image }}" alt="{{ product.name }}">
                       {% else %}
-                        <a href="#" class="btn btn-sm btn-primary">
-                          <i class="bi bi-cart-plus me-1"></i> Add
-                        </a>
+                        <img src="{% static 'shop/no-image.png' %}" alt="No image">
                       {% endif %}
                     </div>
 
+                    <div class="card-body d-flex flex-column">
+                      
+                      <a href="{% url 'product_detail' product.id %}" class="product-link">
+                          <h5 class="mb-1 product-title">{{ product.name }}</h5>
+                      </a>
+                      <p class="text-muted small mb-3">
+                        {{ product.description|truncatechars:80 }}
+                      </p>
+
+                      <!-- Rating Section -->
+                      <div class="mb-3">
+                        <div class="d-flex align-items-center gap-2">
+                          <div class="rating-stars">
+                            {% for i in "12345" %}
+                              {% if i|add:"0" <= product.avg_rating %}
+                                <i class="bi bi-star-fill" style="color: #ffc107;"></i>
+                              {% elif i|add:"0" < product.avg_rating|add:"1" %}
+                                <i class="bi bi-star-half" style="color: #ffc107;"></i>
+                              {% else %}
+                                <i class="bi bi-star" style="color: #ccc;"></i>
+                              {% endif %}
+                            {% endfor %}
+                          </div>
+                          <span class="small text-muted">
+                            {{ product.avg_rating|floatformat:1 }} ({{ product.total_reviews }})
+                          </span>
+                        </div>
+                      </div>
+
+                      <div class="d-flex align-items-center justify-content-between mt-auto">
+                        {% if product.stock > 0 %}
+                          <div class="price">₹{{ product.price }}</div>
+                        {% endif %}
+
+                        {% if product.stock <= 0 %}
+                          <span class="badge bg-danger">Out of Stock</span>
+                        {% else %}
+                          <a href="#" class="btn btn-sm btn-primary">
+                            <i class="bi bi-cart-plus me-1"></i> Add
+                          </a>
+                        {% endif %}
+                      </div>
+
+                    </div>
                   </div>
                 </div>
-              </div>
-              {% endfor %}
-            {% else %}
-              <div class="col-12">
-                <p class="text-muted">
-                  No products available in this category.
-                </p>
-              </div>
-            {% endif %}
-          {% endwith %}
+                {% endfor %}
+              {% else %}
+                <div class="col-12">
+                  <p class="text-muted">
+                    No products available in this category.
+                  </p>
+                </div>
+              {% endif %}
+            {% endwith %}
 
+          </div>
+
+          <button class="carousel-btn carousel-btn-next" onclick="scrollCarousel('carousel-{{ category.id }}', 300)">
+            <i class="bi bi-chevron-right"></i>
+          </button>
         </div>
       </div>
       {% endfor %}
@@ -281,6 +397,16 @@
 </button>
 
 <script>
+function scrollCarousel(carouselId, distance) {
+  const carousel = document.getElementById(carouselId);
+  if (carousel) {
+    carousel.scrollBy({
+      left: distance,
+      behavior: 'smooth'
+    });
+  }
+}
+
 (function() {
   const scrollBtn = document.getElementById('scrollTopBtn');
   window.addEventListener('scroll', function() {

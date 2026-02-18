@@ -70,5 +70,19 @@
     </div>
 </div>
 
+<script>
+function toggleCustomCategory() {
+    const categorySelect = document.getElementById('categorySelect');
+    const customCategoryInput = document.getElementById('customCategoryInput');
+    
+    if (categorySelect.value === 'custom') {
+        customCategoryInput.style.display = 'block';
+        customCategoryInput.required = true;
+    } else {
+        customCategoryInput.style.display = 'none';
+        customCategoryInput.required = false;
+    }
+}
+</script>
 
 {% endblock %}

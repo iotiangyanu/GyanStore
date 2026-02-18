@@ -38,7 +38,7 @@ class Product(models.Model):
     is_active = models.BooleanField(default=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     created_at = models.DateTimeField(auto_now_add=True)
-
+    seller = models.ForeignKey(User, on_delete=models.CASCADE, related_name='products')
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
