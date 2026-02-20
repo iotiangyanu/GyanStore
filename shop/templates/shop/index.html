@@ -352,9 +352,9 @@
                         {% if product.stock <= 0 %}
                           <span class="badge bg-danger">Out of Stock</span>
                         {% else %}
-                          <a href="#" class="btn btn-sm btn-primary">
+                          {% comment %} <a href="#" class="btn btn-sm btn-primary">
                             <i class="bi bi-cart-plus me-1"></i> Add
-                          </a>
+                          </a> {% endcomment %}
                         {% endif %}
                       </div>
 
