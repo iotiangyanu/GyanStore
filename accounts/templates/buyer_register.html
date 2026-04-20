@@ -1,0 +1,106 @@
+{% extends "layout.html" %}
+{% load static %}
+
+{% block title %}Register as Buyer - GyanStore{% endblock %}
+
+{% block content %}
+
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    
+    <div class="card shadow-lg p-4" style="width: 100%; max-width: 420px; border-radius: 15px;">
+        
+        <div class="text-center mb-4">
+            <h3 class="fw-bold">Create Buyer Account</h3>
+            <p class="text-muted">Join GyanStore to start shopping</p>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <!-- First Name -->
+            <div class="mb-3">
+                <label class="form-label">First Name</label>
+                <div class="input-group">
+                    <span class="input-group-text">
+                        <i class="bi bi-person"></i>
+                    </span>
+                    <input type="text" name="first_name" class="form-control" placeholder="Enter first name" required>
+                </div>
+            </div>
+
+            <!-- Last Name -->
+            <div class="mb-3">
+                <label class="form-label">Last Name</label>
+                <div class="input-group">
+                    <span class="input-group-text">
+                        <i class="bi bi-person"></i>
+                    </span>
+                    <input type="text" name="last_name" class="form-control" placeholder="Enter last name" required>
+                </div>
+            </div>
+
+            <!-- Username -->
+            <div class="mb-3">
+                <label class="form-label">Username</label>
+                <div class="input-group">
+                    <span class="input-group-text">
+                        <i class="bi bi-at"></i>
+                    </span>
+                    <input type="text" name="username" class="form-control" placeholder="Choose username" required>
+                </div>
+            </div>
+
+            <!-- Email -->
+            <div class="mb-3">
+                <label class="form-label">Email (Optional)</label>
+                <div class="input-group">
+                    <span class="input-group-text">
+                        <i class="bi bi-envelope"></i>
+                    </span>
+                    <input type="email" name="email" class="form-control" placeholder="Enter email">
+                </div>
+            </div>
+
+            <!-- Password -->
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                <div class="input-group">
+                    <span class="input-group-text">
+                        <i class="bi bi-lock"></i>
+                    </span>
+                    <input type="password" name="password" class="form-control" placeholder="Create password" required>
+                </div>
+            </div>
+
+            <!-- Register Button -->
+            <div class="d-grid mb-3">
+                <button type="submit" class="btn btn-success">
+                    <i class="bi bi-person-plus"></i> Create Account
+                </button>
+            </div>
+
+        </form>
+
+        <hr>
+
+        <!-- Login Link -->
+        <div class="text-center">
+            <p class="mb-0">
+                Already have an account? 
+                <a href="{% url 'login' %}" class="text-decoration-none fw-semibold">Sign In</a>
+            </p>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

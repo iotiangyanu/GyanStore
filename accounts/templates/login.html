@@ -24,6 +24,9 @@
 
         <form method="POST">
             {% csrf_token %}
+            
+            <!-- Hidden next field for redirect after login -->
+            <input type="hidden" name="next" value="{{ request.GET.next }}">
 
             <!-- Username -->
             <div class="mb-3">
@@ -50,7 +53,7 @@
             <!-- Sign In Button -->
             <div class="d-grid mb-3">
                 <button type="submit" class="btn btn-primary">
-                    <i class="bi bi-box-arrow-in-right" url = ''></i> Sign In
+                    <i class="bi bi-box-arrow-in-right"></i> Sign In
                 </button>
             </div>
 
@@ -62,7 +65,7 @@
         <div class="text-center">
             <p class="mb-0">
                 Don't have an account? 
-                <a href="{% url 'register' %}" class="text-decoration-none fw-semibold" formmethod= 'formpost'>Create New Account</a>
+                <a href="{% url 'buyer_register' %}" class="text-decoration-none fw-semibold">Create New Account</a>
             </p>
         </div>
 

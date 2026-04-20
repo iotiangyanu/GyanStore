@@ -31,12 +31,30 @@
             <hr>
 
             <!-- Add to Cart Button -->
-            {% comment %} <form method="POST" action="{% url 'add_to_cart' product.id %}">
+            {% if product.stock > 0 %}
+              <form method="post" action="{% url 'add_to_cart' product.id %}" class="mb-3">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-primary btn-lg">
-                    Add to Cart
-                </button>
-            </form> {% endcomment %}
+                <div class="d-flex align-items-center gap-3">
+                  <div>
+                    <label for="quantity" class="form-label">Quantity:</label>
+                    <select name="quantity" id="quantity" class="form-select" style="width: 80px;">
+                      {% for i in "12345" %}
+                        {% if i|add:"0" <= product.stock %}
+                          <option value="{{ i }}">{{ i }}</option>
+                        {% endif %}
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <button type="submit" class="btn btn-primary btn-lg">
+                    <i class="bi bi-cart-plus me-2"></i>Add to Cart
+                  </button>
+                </div>
+              </form>
+            {% else %}
+              <div class="alert alert-warning">
+                <i class="bi bi-exclamation-triangle me-2"></i>This product is currently out of stock.
+              </div>
+            {% endif %}
 
             <a href="{% url 'shop_home' %}" class="btn btn-secondary mt-3">
                 Back to Shop
